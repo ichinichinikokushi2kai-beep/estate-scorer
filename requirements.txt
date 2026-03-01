@@ -1,0 +1,12 @@
+streamlit
+requests
+beautifulsoup4
+pandas
+openpyxl
+PyYAML
+streamlit
+newspaper3k
+openai>=1.30.0
+anthropic>=0.34.0
+requests
+lxml[html_clean]

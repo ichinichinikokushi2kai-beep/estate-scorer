@@ -1,0 +1,111 @@
+# 物件抽出条件の定義（スコアリング方式）
+# 各要素のスコアを合算し、合格閾値以上だった物件のみをDB保存・新着検出の対象とする。
+# 値が取得できない項目は 0 点として扱う（またはスキップするかは実装で決定）。
+
+# 合格に必要な合計スコアの閾値
+threshold: 0
+
+# 価格（万円）。price_min または price_max のいずれかで判定。
+# 都道府県ごとに異なるスコアテーブルを定義。
+price:
+  # 都道府県名でマッチ（完全一致または前方一致など、実装で決定）
+  "東京都":
+    - max_price: 5000
+      score: 2
+    - max_price: 5250
+      score: 1
+    - max_price: 5500
+      score: 0
+    - max_price: 5750
+      score: -1
+    - max_price: 6000
+      score: -2
+    # 6000万超: スコアなし（0 または対象外）
+  "神奈川県":
+    - max_price: 5000
+      score: 1
+    - max_price: 5250
+      score: 0
+    - max_price: 5500
+      score: -1
+    - max_price: 5750
+      score: -2
+    - max_price: 6000
+      score: -3
+  # 上記以外の都道府県: default を使用
+  default:
+    - max_price: 5000
+      score: 2
+    - max_price: 5250
+      score: 1
+    - max_price: 5500
+      score: 0
+    - max_price: 5750
+      score: -1
+    - max_price: 6000
+      score: -2
+
+# 建物面積（m²）。building_area で判定。
+building_area:
+  - min_area: 100
+    score: 1
+  - min_area: 80
+    score: 0
+  - min_area: 70
+    score: -1
+  # 70未満: スコアなし（0 または対象外）
+
+# 駅徒歩（分）。walk_minutes で判定。
+walk_to_station:
+  - max_minutes: 4
+    score: 2
+  - max_minutes: 7
+    score: 1
+  - max_minutes: 10
+    score: 0
+  - max_minutes: 13
+    score: -1
+  - max_minutes: 16
+    score: -2
+  # 16分超: スコアなし（0 または対象外）
+
+# 乗換回数。所要時間マスタまたは乗換案内から取得。一覧では取得できない場合は要検討。
+transfers:
+  - max_transfers: 0
+    score: 0.5
+  - max_transfers: 1
+    score: -0.5
+  # 2回以上: スコアなし（0 または対象外）
+
+# 最寄り駅～職場の所要時間（分）。所要時間マスタで突合。TTL = 乗車時間 + 徒歩分数。
+station_to_workplace:
+  - max_minutes: 45
+    score: 0
+  - max_minutes: 60
+    score: -1
+  - max_minutes: 75
+    score: -2
+  # 75分超: スコアなし（0 または対象外）
+
+# 築年数。減点方式。詳細は要定義。
+# 例: 新築=0, 5年以内=-0.5, 10年以内=-1, 20年以内=-2, それ以上=-3 など
+built_year:
+  # TODO: 築年数のパース方法（「新築」「1985年」等）とスコアテーブルを定義
+  new: 0
+  # years_old: score のマッピングを追加
+
+# 住みよさ・交通の便。SUUMOの指標があれば利用。要検討。
+# livability: {}
+
+# 始発駅かどうか。当駅始発なら score: 1、それ以外は 0。
+# 一覧では取得できない場合あり。詳細ページ要否は要検討。
+first_train:
+  yes: 1
+  no: 0
+
+# 建物の階数（戸建の場合）。2階建て / 3階建て など。
+# 一覧では取得できない場合あり。詳細ページ要否は要検討。
+floors:
+  "2階建て": 0.5
+  "3階建て": -0.5
+  # その他: 0

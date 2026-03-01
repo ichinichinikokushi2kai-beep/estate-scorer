@@ -1,0 +1,28 @@
+# SUUMO 新着物件バッチ 設定サンプル
+# コピーして config.yaml を作成し、値を埋めてください。
+# GitHub Actions では Secrets で渡すため、本番では config.yaml は不要です。
+
+# パス（省略時はデフォルト）
+# url_list_path: ./docs/suumo_url_list.csv
+# station_time_master_path: ./station_time.xlsx
+# delay_seconds: 1.0
+
+# ========== メール送信（Gmail の場合） ==========
+# すべて「自分のGmail」で送る想定です。
+#
+# smtp_host / smtp_port … Gmail ならこのまま
+# smtp_user … メールを送るGmailアカウント（自分のアドレス）
+# smtp_pass … そのGmail用に発行した「アプリパスワード」（通常のログインパスワードではない・16文字）
+# from_email … メールの「差出人」として表示されるアドレス → 通常は smtp_user と同じ（自分のGmail）
+# to_emails … 新着メールを「受け取る」アドレス。自分で受け取るなら自分のGmailを1つ書く。複数可。
+#
+smtp_host: smtp.gmail.com
+smtp_port: 587
+smtp_user: your_email@gmail.com   # ← 自分のGmailアドレスに書き換え
+smtp_pass: your_app_password      # ← 発行したアプリパスワードに書き換え
+from_email: your_email@gmail.com  # ← 同じく自分のGmailアドレス（差出人）
+to_emails:
+  - your_email@gmail.com          # ← 受け取るアドレス（自分なら同じでOK。別アドレスでも可）
+
+# 全物件一覧のURL（メール本文に載るリンク。後で GitHub Pages を有効にしたらここにURLを書く）
+# properties_list_page_url: https://yourname.github.io/your_repo/docs/properties_list.html

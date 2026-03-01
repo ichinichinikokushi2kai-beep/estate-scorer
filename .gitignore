@@ -1,0 +1,14 @@
+# 設定ファイル（パスワード等を含むためコミットしない）
+config.yaml
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+venv/
+.env
+
+# その他
+.DS_Store
+*.log
