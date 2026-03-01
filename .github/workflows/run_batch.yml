@@ -1,6 +1,6 @@
 # SUUMO 新着物件バッチ - GitHub Actions ワークフロー
 # 毎日 JST 6:00 に実行（UTC 21:00）
-name: SUUMO Batch
+name: estate-scorer batch
 
 on:
   schedule:
