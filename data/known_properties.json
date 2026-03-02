@@ -40550,5 +40550,28 @@
     "extraction_score": 1.0,
     "first_seen_at": "2026-03-02T14:27:32Z",
     "created_at": "2026-03-02T14:27:32Z"
+  },
+  {
+    "property_id": "nc_20356715",
+    "property_url": "https://suumo.jp/ms/chuko/kanagawa/sc_isehara/nc_20356715/",
+    "property_name": "リーフィアレジデンス愛甲石田",
+    "price_min": 4450.0,
+    "price_max": 4450.0,
+    "address": "神奈川県伊勢原市石田",
+    "nearest_station": "愛甲石田",
+    "walk_minutes": 5,
+    "land_area": null,
+    "building_area": null,
+    "layout": "3LDK",
+    "built_year": "2015年2月",
+    "category": "中古マンション",
+    "prefecture": "神奈川",
+    "time_to_workplace": null,
+    "first_train_score": 0,
+    "neighborhood_score": 0,
+    "total_time": null,
+    "extraction_score": 1.0,
+    "first_seen_at": "2026-03-02T22:04:56Z",
+    "created_at": "2026-03-02T22:04:56Z"
   }
 ]
