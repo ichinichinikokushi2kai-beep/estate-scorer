@@ -68,13 +68,24 @@ def score_property(prop: Dict[str, Any], conditions: Dict[str, Any]) -> float:
             total += float(built_cfg.get("new", 0))
         # TODO: 年数パースで years_old マッピング
 
-    # 始発・階数（一覧では取得できないため 0）
-    first_cfg = conditions.get("first_train") or {}
-    if first_cfg and prop.get("first_train"):
-        total += float(first_cfg.get("yes", 0))
+    # 始発駅スコア（所要時間マスタで突合。ランクに応じたポイントをそのまま加算）
+    first_score = _num(prop.get("first_train_score")) or 0.0
+    total += float(first_score)
+    # 近隣スコア（所要時間マスタで突合。近さに応じたポイントをそのまま加算）
+    neighbor_score = _num(prop.get("neighborhood_score")) or 0.0
+    total += float(neighbor_score)
     floors_cfg = conditions.get("floors") or {}
     if floors_cfg and prop.get("floors"):
         total += float(floors_cfg.get(prop["floors"], 0))
+
+    # 建物面積÷土地面積で階数を推定（戸建のみ。土地面積が0/Noneならスキップ）
+    ratio_cfg = conditions.get("inferred_floors_by_ratio") or []
+    if ratio_cfg:
+        building = _num(prop.get("building_area"))
+        land = _num(prop.get("land_area"))
+        if building is not None and land is not None and land > 0:
+            ratio = building / land
+            total += _score_by_max_value(ratio, ratio_cfg, "max_ratio")
 
     return total
 

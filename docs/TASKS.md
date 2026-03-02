@@ -60,7 +60,9 @@
 |---|--------|------|------|
 | 5.1 | URL リストの更新 | 検索条件を変えたいときは `docs/suumo_url_list.csv` を編集してコミット・プッシュ | |
 | 5.2 | 抽出条件の変更 | `docs/extraction_conditions.yaml` を編集してコミット・プッシュ | |
-| 5.3 | 所要時間マスタの更新 | `station_time.xlsx` を更新してコミット・プッシュ | |
+| 5.3 | 所要時間マスタの更新 | `station_time.xlsx` を更新してコミット・プッシュ | 列: 駅名, 職場まで所要時間(分), 始発駅スコア, 近隣スコア |
+| 5.3a | 始発駅スコア | 通勤コンパスのランクに応じて設定（多い→1.0, 中くらい→0.5, 少ない/乗り入れ先→0.25）。`python scripts/add_station_columns.py` で一括更新 | 出典: [通勤コンパス](https://en-culture.net/commute/first.html#google_vignette) |
+| 5.3b | 近隣スコア | ユーザーが手動で近さに応じたポイントを設定。その値がそのままスコアに加算 | |
 | 5.4 | 無料枠の確認 | プライベートリポジトリなら月 2,000 分。Actions の使用量をたまに確認 | 超過するとその月は実行停止。課金はされない |
 
 ---
@@ -73,3 +75,14 @@
 4. **4. GitHub に上げて Actions で動かす** で Secrets を入れ、手動実行 → スケジュール確認
 
 実装（2）は Phase 1 から順に進めると、早い段階で `--dry-run` による動作確認ができます。
+
+---
+
+## 6. inferred_floors_by_ratio のサンプル調査（完了）
+
+| # | 内容 | 備考 |
+|---|------|------|
+| 6.1 | サンプル調査スクリプト | `scripts/sample_floors_survey.py`。一覧から建物・土地面積を取得し、詳細ページで実階数を取得。ratio と実階数の対応を CSV 出力 |
+| 6.2 | 実行方法 | `python scripts/sample_floors_survey.py [--limit N]`。`--limit` で詳細取得件数（デフォルト15/ページ） |
+| 6.3 | 出力 | `docs/floors_survey_result.csv`（property_id, url, building_area, land_area, ratio, actual_floors, inferred_score） |
+| 6.4 | 調査結果・閾値 | 疑わしきは罰せず: ratio<=1.2 のときのみ +0.5、それ以上は加点なし（減点しない） |

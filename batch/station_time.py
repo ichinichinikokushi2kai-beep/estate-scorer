@@ -1,19 +1,19 @@
 """
 所要時間マスタ（station_time.xlsx）の読み込み。
-列: 駅名 or 最寄り駅, 職場まで所要時間(分) or 所要時間 など「分」を含む列。
+列: 駅名 or 最寄り駅, 職場まで所要時間(分), 始発駅スコア, 近隣スコア（任意）
 """
 import logging
 from pathlib import Path
-from typing import Dict
+from typing import Any, Dict
 
 import pandas as pd
 
 logger = logging.getLogger(__name__)
 
 
-def load_station_time_master(path: str) -> Dict[str, int]:
+def load_station_time_master(path: str) -> Dict[str, Dict[str, Any]]:
     """
-    station_time.xlsx を読み、{駅名: 所要時間(分)} の辞書を返す。
+    station_time.xlsx を読み、{駅名: {time, first_train_score, neighborhood_score}} の辞書を返す。
     ファイルが存在しない・読み込み失敗時は空辞書を返す（突合スキップ）。
     """
     p = Path(path)
@@ -51,7 +51,10 @@ def load_station_time_master(path: str) -> Dict[str, int]:
         logger.warning("所要時間マスタに所要時間列が見つかりません: %s", path)
         return {}
 
-    result: Dict[str, int] = {}
+    first_col = "始発駅スコア" if "始発駅スコア" in df.columns else ("始発駅フラグ" if "始発駅フラグ" in df.columns else None)
+    neighbor_col = "近隣スコア" if "近隣スコア" in df.columns else ("近隣フラグ" if "近隣フラグ" in df.columns else None)
+
+    result: Dict[str, Dict[str, Any]] = {}
     for _, row in df.iterrows():
         st = row.get(station_col)
         if pd.isna(st):
@@ -63,5 +66,29 @@ def load_station_time_master(path: str) -> Dict[str, int]:
             val = int(row[time_col])
         except (ValueError, TypeError):
             continue
-        result[st] = val
+        if first_col:
+            fv = row.get(first_col)
+            first_score = _to_float(fv) if first_col == "始発駅スコア" else (0.5 if _to_int(fv) == 1 else 0.0)
+        else:
+            first_score = 0.0
+        neighbor_score = _to_float(row.get(neighbor_col)) if neighbor_col else 0.0
+        result[st] = {"time": val, "first_train_score": first_score, "neighborhood_score": neighbor_score}
     return result
+
+
+def _to_int(v) -> int:
+    if v is None or (isinstance(v, float) and pd.isna(v)):
+        return 0
+    try:
+        return int(float(v))
+    except (ValueError, TypeError):
+        return 0
+
+
+def _to_float(v) -> float:
+    if v is None or (isinstance(v, float) and pd.isna(v)):
+        return 0.0
+    try:
+        return float(v)
+    except (ValueError, TypeError):
+        return 0.0

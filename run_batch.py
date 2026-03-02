@@ -122,9 +122,21 @@ def main() -> None:
             # 所要時間マスタで突合
             station = r.get("nearest_station")
             walk = r.get("walk_minutes") or 0
-            time_work = station_times.get(station) if station else None
-            r["time_to_workplace"] = time_work
-            r["total_time"] = (time_work + walk) if (time_work is not None and walk is not None) else time_work
+            rec = station_times.get(station) if station else None
+            if rec:
+                time_work = rec.get("time")
+                r["time_to_workplace"] = time_work
+                r["first_train_score"] = rec.get("first_train_score", 0)
+                r["neighborhood_score"] = rec.get("neighborhood_score", 0)
+            else:
+                r["time_to_workplace"] = None
+                r["first_train_score"] = 0
+                r["neighborhood_score"] = 0
+            r["total_time"] = (
+                (r["time_to_workplace"] + walk)
+                if (r["time_to_workplace"] is not None and walk is not None)
+                else r["time_to_workplace"]
+            )
             all_props.append(r)
 
     logger.info("取得件数: %s", len(all_props))
