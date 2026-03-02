@@ -53,6 +53,54 @@ def send_new_listings_email(
         return False
 
 
+def send_no_new_listings_email(
+    above_threshold_count: int,
+    list_page_url: Optional[str],
+    *,
+    smtp_host: str,
+    smtp_port: int,
+    smtp_user: str,
+    smtp_pass: str,
+    from_email: str,
+    to_emails: List[str],
+) -> bool:
+    """
+    新着が0件のときに「新着はありません」メールを送信する。
+    """
+    if not to_emails:
+        logger.warning("送信先メールアドレスが設定されていません")
+        return False
+
+    subject = "【SUUMO】新着物件 0 件（本日の検索完了）"
+    lines = [
+        "本日の検索で新着物件はありませんでした。",
+        "",
+        f"閾値以上の物件数: {above_threshold_count} 件",
+    ]
+    if list_page_url:
+        lines.append("")
+        lines.append("【全物件一覧（条件ポイント降順）】")
+        lines.append(list_page_url)
+    body = "\n".join(lines)
+
+    msg = MIMEMultipart("alternative")
+    msg["Subject"] = subject
+    msg["From"] = from_email
+    msg["To"] = ", ".join(to_emails)
+    msg.attach(MIMEText(body, "plain", "utf-8"))
+
+    try:
+        with smtplib.SMTP(smtp_host, smtp_port) as server:
+            server.starttls()
+            server.login(smtp_user, smtp_pass)
+            server.sendmail(from_email, to_emails, msg.as_string())
+        logger.info("メール送信完了: 新着なし通知を %s 宛に送信", to_emails)
+        return True
+    except Exception as e:
+        logger.exception("メール送信に失敗しました: %s", e)
+        return False
+
+
 def _build_body(new_listings: List[Dict[str, Any]], list_page_url: Optional[str]) -> str:
     lines = [
         f"新着物件が {len(new_listings)} 件あります。",

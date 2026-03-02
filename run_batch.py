@@ -171,8 +171,9 @@ def main() -> None:
         properties_list.generate_properties_list_html(above_threshold, list_html_path)
         logger.info("全物件一覧を出力: %s", list_html_path)
 
+        list_page_url = config.get("properties_list_page_url", "")
+        to_emails = config.get("to_emails") or []
         if new_listings:
-            list_page_url = config.get("properties_list_page_url", "")
             send_ok = mailer.send_new_listings_email(
                 new_listings,
                 list_page_url or None,
@@ -181,12 +182,26 @@ def main() -> None:
                 smtp_user=config.get("smtp_user", ""),
                 smtp_pass=config.get("smtp_pass", ""),
                 from_email=config.get("from_email", ""),
-                to_emails=config.get("to_emails") or [],
+                to_emails=to_emails,
             )
             if not send_ok:
                 logger.warning("メール送信に失敗しました")
         else:
-            logger.info("新着なしのためメール送信しません")
+            if to_emails:
+                send_ok = mailer.send_no_new_listings_email(
+                    len(above_threshold),
+                    list_page_url or None,
+                    smtp_host=config.get("smtp_host", ""),
+                    smtp_port=int(config.get("smtp_port", 587)),
+                    smtp_user=config.get("smtp_user", ""),
+                    smtp_pass=config.get("smtp_pass", ""),
+                    from_email=config.get("from_email", ""),
+                    to_emails=to_emails,
+                )
+                if not send_ok:
+                    logger.warning("メール送信に失敗しました")
+            else:
+                logger.info("新着なし・送信先未設定のためメール送信しません")
     else:
         logger.info("--dry-run のため保存・メール送信は行いません。新着: %s 件", len(new_listings))
 
