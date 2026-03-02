@@ -2,7 +2,9 @@
 抽出条件（extraction_conditions.yaml）の読み込みとスコアリング。
 閾値以上だった物件のみを抽出対象とする。
 """
+import re
 import logging
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -60,13 +62,18 @@ def score_property(prop: Dict[str, Any], conditions: Dict[str, Any]) -> float:
     if transfers is not None and transfers_cfg:
         total += _score_by_max_value(transfers, transfers_cfg, "max_transfers")
 
-    # 築年数
+    # 築年数（新築=0, 5年以内=-0.5, 10年以内=-1, 20年以内=-2, それ以上=-3）
     built_cfg = conditions.get("built_year") or {}
     built = (prop.get("built_year") or "").strip()
     if built:
-        if built == "新築" or (built_cfg and built_cfg.get("new") is not None):
+        if built == "新築":
             total += float(built_cfg.get("new", 0))
-        # TODO: 年数パースで years_old マッピング
+        else:
+            years_old = _parse_built_years_old(built)
+            if years_old is not None:
+                years_table = built_cfg.get("years_old") or []
+                if years_table:
+                    total += _score_by_max_value(float(years_old), years_table, "max_years")
 
     # 始発駅スコア（所要時間マスタで突合。ランクに応じたポイントをそのまま加算）
     first_score = _num(prop.get("first_train_score")) or 0.0
@@ -118,6 +125,30 @@ def _num(v) -> Optional[float]:
 def _int(v) -> Optional[int]:
     n = _num(v)
     return int(n) if n is not None else None
+
+
+def _parse_built_years_old(built_str: str) -> Optional[int]:
+    """
+    築年数文字列から経過年数を返す。
+    例: 「新築」→0, 「築5年」→5, 「1985年」→40（当年から計算）
+    """
+    if not built_str or not isinstance(built_str, str):
+        return None
+    s = built_str.strip()
+    if not s:
+        return None
+    if s == "新築":
+        return 0
+    # 築5年、築10年
+    m = re.search(r"築\s*(\d+)\s*年", s)
+    if m:
+        return int(m.group(1))
+    # 1985年、1985年築、2020年1月
+    m = re.search(r"(\d{4})\s*年", s)
+    if m:
+        year = int(m.group(1))
+        return datetime.now().year - year
+    return None
 
 
 def get_threshold(conditions: Dict[str, Any]) -> float:

@@ -87,12 +87,21 @@ station_to_workplace:
     score: -2
   # 75分超: スコアなし（0 または対象外）
 
-# 築年数。減点方式。詳細は要定義。
-# 例: 新築=0, 5年以内=-0.5, 10年以内=-1, 20年以内=-2, それ以上=-3 など
+# 築年数。減点方式。
+# 新築=0, 5年以内=-0.5, 10年以内=-1, 20年以内=-2, それ以上=-3
 built_year:
-  # TODO: 築年数のパース方法（「新築」「1985年」等）とスコアテーブルを定義
   new: 0
-  # years_old: score のマッピングを追加
+  years_old:
+    - max_years: 0
+      score: 0
+    - max_years: 5
+      score: -0.5
+    - max_years: 10
+      score: -1
+    - max_years: 20
+      score: -2
+    - max_years: 999
+      score: -3
 
 # 住みよさ・交通の便。SUUMOの指標があれば利用。要検討。
 # livability: {}
