@@ -51,6 +51,8 @@ def load_config(config_path: Optional[str] = None) -> Dict[str, Any]:
         cfg["to_emails"] = [e.strip() for e in os.environ["TO_EMAILS"].split(",") if e.strip()]
     elif "to_emails" not in cfg:
         cfg["to_emails"] = []
+    if os.environ.get("PROPERTIES_LIST_PAGE_URL"):
+        cfg["properties_list_page_url"] = os.environ["PROPERTIES_LIST_PAGE_URL"]
     if cfg.get("smtp_port") is not None:
         cfg["smtp_port"] = int(cfg["smtp_port"])
     return cfg

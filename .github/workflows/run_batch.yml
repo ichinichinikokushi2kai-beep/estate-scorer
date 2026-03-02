@@ -34,6 +34,7 @@ jobs:
           SMTP_PASS: ${{ secrets.SMTP_PASS }}
           FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
           TO_EMAILS: ${{ secrets.TO_EMAILS }}
+          PROPERTIES_LIST_PAGE_URL: ${{ secrets.PROPERTIES_LIST_PAGE_URL }}
         run: |
           python run_batch.py
 

@@ -42,22 +42,24 @@ https://<あなたのGitHubユーザー名>.github.io/<リポジトリ名>/prope
 
 ---
 
-## 4. config.yaml に URL を書く
+## 4. メールのリンク先 URL を設定する
 
 メール本文に載せる「全物件一覧」のリンクを設定します。
 
-**ローカル用（config.yaml）:**
+**GitHub Actions で動かす場合（必須）:**
+
+1. リポジトリの **Settings** → **Secrets and variables** → **Actions** を開く
+2. **New repository secret** をクリック
+3. **Name**: `PROPERTIES_LIST_PAGE_URL`（名前は正確に）
+4. **Value**: `https://<あなたのGitHubユーザー名>.github.io/<リポジトリ名>/properties_list.html`
+   - 例: `https://ichinichinikokushi2kai-beep.github.io/estate-scorer/properties_list.html`
+5. **Add secret** をクリック
+
+**ローカルでメール送信する場合（config.yaml）:**
 
 ```yaml
 properties_list_page_url: https://<あなたのGitHubユーザー名>.github.io/<リポジトリ名>/properties_list.html
 ```
-
-**GitHub Actions で動かす場合:**
-
-- リポジトリの **Settings → Secrets and variables → Actions** で  
-  `PROPERTIES_LIST_PAGE_URL` のような Secret を追加し、上記と同じURLを入れる方法もあります。
-- 現在のワークフローではこの環境変数は未使用なので、**config で指定するか、後でワークフローに `PROPERTIES_LIST_PAGE_URL` を渡す処理を追加**する必要があります。  
-  ローカルでメール送信するだけなら、`config.yaml` に書けば十分です。
 
 ---
 
@@ -74,4 +76,4 @@ properties_list_page_url: https://<あなたのGitHubユーザー名>.github.io/
 
 - **404 になる**: Source の Branch / Folder が正しいか確認（Branch: main, Folder: /docs）
 - **古い内容のまま**: プッシュ直後は数分かかることがある。最新コミットに `docs/properties_list.html` が含まれているか確認
-- **リポジトリがプライベート**: GitHub の無料アカウントでも、プライベートリポジトリで GitHub Pages は利用可能（公開されるのは Pages で配信している部分）
+- **リポジトリがプライベート**: 無料プランでは Pages はパブリックリポジトリのみ。プライベートの場合はリポジトリをパブリックにする必要あり
