@@ -41240,5 +41240,28 @@
     "extraction_score": 0.0,
     "first_seen_at": "2026-03-10T22:00:01Z",
     "created_at": "2026-03-10T22:00:01Z"
+  },
+  {
+    "property_id": "nc_20421876",
+    "property_url": "https://suumo.jp/ikkodate/tokyo/sc_inagi/nc_20421876/",
+    "property_name": "平尾２（五月台駅） 4899万円",
+    "price_min": 4899.0,
+    "price_max": 4899.0,
+    "address": "東京都稲城市平尾２",
+    "nearest_station": "五月台",
+    "walk_minutes": 12,
+    "land_area": 171.21,
+    "building_area": 102.26,
+    "layout": "4LDK",
+    "built_year": "新築",
+    "category": "新築戸建",
+    "prefecture": "東京都",
+    "time_to_workplace": 48,
+    "first_train_score": 0.0,
+    "neighborhood_score": 0.0,
+    "total_time": 60,
+    "extraction_score": 1.5,
+    "first_seen_at": "2026-03-11T22:02:24Z",
+    "created_at": "2026-03-11T22:02:24Z"
   }
 ]
