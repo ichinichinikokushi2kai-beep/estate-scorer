@@ -41815,5 +41815,28 @@
     "extraction_score": 1.0,
     "first_seen_at": "2026-03-16T22:58:23Z",
     "created_at": "2026-03-16T22:58:23Z"
+  },
+  {
+    "property_id": "nc_20423099",
+    "property_url": "https://suumo.jp/ms/chuko/kanagawa/sc_yokohamashiizumi/nc_20423099/",
+    "property_name": "グレーシアステイツいずみ野",
+    "price_min": 5080.0,
+    "price_max": 5080.0,
+    "address": "神奈川県横浜市泉区和泉町",
+    "nearest_station": "いずみ野",
+    "walk_minutes": 3,
+    "land_area": null,
+    "building_area": null,
+    "layout": "4LDK",
+    "built_year": "2008年2月",
+    "category": "中古マンション",
+    "prefecture": "神奈川",
+    "time_to_workplace": null,
+    "first_train_score": 0,
+    "neighborhood_score": 0,
+    "total_time": null,
+    "extraction_score": 1.0,
+    "first_seen_at": "2026-03-17T22:11:50Z",
+    "created_at": "2026-03-17T22:11:50Z"
   }
 ]
