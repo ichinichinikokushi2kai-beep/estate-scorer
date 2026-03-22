@@ -42160,5 +42160,28 @@
     "extraction_score": 0.5,
     "first_seen_at": "2026-03-21T21:54:45Z",
     "created_at": "2026-03-21T21:54:45Z"
+  },
+  {
+    "property_id": "nc_79009442",
+    "property_url": "https://suumo.jp/ikkodate/tokyo/sc_fuchu/nc_79009442/",
+    "property_name": "小柳町５（競艇場前駅） 5180万円・5380万円",
+    "price_min": 5180.0,
+    "price_max": 5380.0,
+    "address": "東京都府中市小柳町５",
+    "nearest_station": "競艇場前",
+    "walk_minutes": 5,
+    "land_area": 90.21,
+    "building_area": 85.7,
+    "layout": "3LDK",
+    "built_year": "新築",
+    "category": "新築戸建",
+    "prefecture": "東京都",
+    "time_to_workplace": 62,
+    "first_train_score": 0.0,
+    "neighborhood_score": 0.0,
+    "total_time": 67,
+    "extraction_score": 0.5,
+    "first_seen_at": "2026-03-22T21:57:40Z",
+    "created_at": "2026-03-22T21:57:40Z"
   }
 ]
