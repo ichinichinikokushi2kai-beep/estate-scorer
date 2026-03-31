@@ -42712,5 +42712,28 @@
     "extraction_score": 1.0,
     "first_seen_at": "2026-03-30T21:45:25Z",
     "created_at": "2026-03-30T21:45:25Z"
+  },
+  {
+    "property_id": "nc_20556474",
+    "property_url": "https://suumo.jp/chukoikkodate/kanagawa/sc_yokohamashiisogo/nc_20556474/",
+    "property_name": "森５（屏風浦駅） 4680万円",
+    "price_min": 4680.0,
+    "price_max": 4680.0,
+    "address": "神奈川県横浜市磯子区森５-5‐24",
+    "nearest_station": "屏風浦",
+    "walk_minutes": 7,
+    "land_area": 123.34,
+    "building_area": 97.36,
+    "layout": "4LDK",
+    "built_year": "2006年6月",
+    "category": "中古戸建",
+    "prefecture": "神奈川",
+    "time_to_workplace": 45,
+    "first_train_score": 0.0,
+    "neighborhood_score": 0.0,
+    "total_time": 52,
+    "extraction_score": 0.5,
+    "first_seen_at": "2026-03-31T21:41:58Z",
+    "created_at": "2026-03-31T21:41:58Z"
   }
 ]
