@@ -117,34 +117,56 @@ def main() -> None:
     # スクレイピング（全URL）
     all_props: List[Dict[str, Any]] = []
     for row in url_list:
-        records = scraper.scrape_url_list([row], delay_seconds=delay_seconds)
+        try:
+            records = scraper.scrape_url_list([row], delay_seconds=delay_seconds)
+        except Exception as e:
+            logger.exception("スクレイピング失敗のためURL行をスキップします: %s", e)
+            continue
         for r in records:
-            # 所要時間マスタで突合
-            station = r.get("nearest_station")
-            walk = r.get("walk_minutes") or 0
-            rec = station_times.get(station) if station else None
-            if rec:
-                time_work = rec.get("time")
-                r["time_to_workplace"] = time_work
-                r["first_train_score"] = rec.get("first_train_score", 0)
-                r["neighborhood_score"] = rec.get("neighborhood_score", 0)
-            else:
-                r["time_to_workplace"] = None
-                r["first_train_score"] = 0
-                r["neighborhood_score"] = 0
-            r["total_time"] = (
-                (r["time_to_workplace"] + walk)
-                if (r["time_to_workplace"] is not None and walk is not None)
-                else r["time_to_workplace"]
-            )
-            all_props.append(r)
+            try:
+                # 所要時間マスタで突合
+                station = r.get("nearest_station")
+                walk = r.get("walk_minutes") or 0
+                rec = station_times.get(station) if station else None
+                if rec:
+                    time_work = rec.get("time")
+                    r["time_to_workplace"] = time_work
+                    r["first_train_score"] = rec.get("first_train_score", 0)
+                    r["neighborhood_score"] = rec.get("neighborhood_score", 0)
+                else:
+                    r["time_to_workplace"] = None
+                    r["first_train_score"] = 0
+                    r["neighborhood_score"] = 0
+                r["total_time"] = (
+                    (r["time_to_workplace"] + walk)
+                    if (r["time_to_workplace"] is not None and walk is not None)
+                    else r["time_to_workplace"]
+                )
+                all_props.append(r)
+            except Exception as e:
+                logger.exception(
+                    "物件補完失敗のためスキップします property_id=%s url=%s: %s",
+                    r.get("property_id"),
+                    r.get("property_url"),
+                    e,
+                )
+                continue
 
     logger.info("取得件数: %s", len(all_props))
 
     # スコアリングと閾値以上のみ
     above_threshold: List[Dict[str, Any]] = []
     for p in all_props:
-        score = extractor.score_property(p, conditions)
+        try:
+            score = extractor.score_property(p, conditions)
+        except Exception as e:
+            logger.exception(
+                "スコアリング失敗のためスキップします property_id=%s url=%s: %s",
+                p.get("property_id"),
+                p.get("property_url"),
+                e,
+            )
+            continue
         if extractor.passes_threshold(score, conditions):
             p["extraction_score"] = round(score, 2)
             above_threshold.append(p)
