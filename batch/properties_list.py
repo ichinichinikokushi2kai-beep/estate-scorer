@@ -3,6 +3,7 @@
 データソースは「今回の検索で取得した物件のうち閾値以上のもの」のみ。
 """
 import html
+import math
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -71,15 +72,14 @@ def generate_properties_list_html(
 def _row_html(p: Dict[str, Any]) -> str:
     score = p.get("extraction_score")
     score_str = str(score) if score is not None else "-"
-    name = html.escape((p.get("property_name") or "").strip())
-    url = p.get("property_url") or "#"
-    url = html.escape(url)
+    name = html.escape(_text(p.get("property_name")).strip())
+    url = html.escape(_text(p.get("property_url")) or "#")
     price = _format_price(p)
-    addr = html.escape((p.get("address") or "")[:60])
-    station = html.escape((p.get("nearest_station") or ""))
+    addr = html.escape(_text(p.get("address"))[:60])
+    station = html.escape(_text(p.get("nearest_station")))
     walk = p.get("walk_minutes")
     walk_str = f"{walk}分" if walk is not None else "-"
-    category = html.escape((p.get("category") or ""))
+    category = html.escape(_text(p.get("category")))
 
     return f"""      <tr>
         <td class="score">{score_str}</td>
@@ -91,6 +91,14 @@ def _row_html(p: Dict[str, Any]) -> str:
         <td>{category}</td>
       </tr>
 """
+
+
+def _text(value: Any) -> str:
+    if value is None:
+        return ""
+    if isinstance(value, float) and math.isnan(value):
+        return ""
+    return str(value)
 
 
 def _format_price(p: Dict[str, Any]) -> str:
