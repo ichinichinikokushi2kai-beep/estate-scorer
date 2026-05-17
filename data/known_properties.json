@@ -45127,5 +45127,28 @@
     "extraction_score": 1.5,
     "first_seen_at": "2026-05-16T21:48:47Z",
     "created_at": "2026-05-16T21:48:47Z"
+  },
+  {
+    "property_id": "nc_20869562",
+    "property_url": "https://suumo.jp/ikkodate/tokyo/sc_fuchu/nc_20869562/",
+    "property_name": "☆10万円相当のオプションプレゼント☆ゆとりのLDKに居室3部屋☆府中市西府町4丁目",
+    "price_min": 4480.0,
+    "price_max": 4780.0,
+    "address": "東京都府中市西府町４",
+    "nearest_station": "谷保",
+    "walk_minutes": 13,
+    "land_area": 75.65,
+    "building_area": 69.55,
+    "layout": "1LDK+S（納戸）・3LDK",
+    "built_year": "新築",
+    "category": "新築戸建",
+    "prefecture": "東京都",
+    "time_to_workplace": 63,
+    "first_train_score": 0.0,
+    "neighborhood_score": 0.0,
+    "total_time": 76,
+    "extraction_score": 1.5,
+    "first_seen_at": "2026-05-17T21:57:10Z",
+    "created_at": "2026-05-17T21:57:10Z"
   }
 ]
