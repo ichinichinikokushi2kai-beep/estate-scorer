@@ -45886,5 +45886,28 @@
     "extraction_score": 0.5,
     "first_seen_at": "2026-05-30T22:02:13Z",
     "created_at": "2026-05-30T22:02:13Z"
+  },
+  {
+    "property_id": "nc_20963346",
+    "property_url": "https://suumo.jp/ms/chuko/tokyo/sc_hachioji/nc_20963346/",
+    "property_name": "レーベン多摩センターＢｅａｕｔ",
+    "price_min": 4698.0,
+    "price_max": 4698.0,
+    "address": "東京都八王子市松が谷",
+    "nearest_station": "松が谷",
+    "walk_minutes": 8,
+    "land_area": null,
+    "building_area": null,
+    "layout": "3LDK",
+    "built_year": "2018年2月",
+    "category": "中古マンション",
+    "prefecture": "東京都",
+    "time_to_workplace": 72,
+    "first_train_score": 0.0,
+    "neighborhood_score": 0.0,
+    "total_time": 80,
+    "extraction_score": 1.0,
+    "first_seen_at": "2026-05-31T22:01:59Z",
+    "created_at": "2026-05-31T22:01:59Z"
   }
 ]
